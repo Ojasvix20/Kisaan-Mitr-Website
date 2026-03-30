@@ -37,22 +37,29 @@
     color: white;
   }
 
-
-  /* 1. Hide the top translation banner iframe */
-  .goog-te-banner-frame.skiptranslate {
+/* 1. Hide ANY iframe that comes from Google Translate */
+iframe[src*="translate.googleapis.com"] {
     display: none !important;
-  }
+}
 
-  /* 2. Reset the body's top positioning that the banner shifts down */
-  body {
+/* 2. Hide the banner frame using standard Google classes just in case */
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate {
+    display: none !important;
+}
+
+/* 3. Force the body and HTML back to the top */
+/* Google forcefully adds inline styles to push your site down, so we MUST override both */
+body, html {
     top: 0px !important;
-  }
+    position: static !important;
+}
 
-  /* 3. (Optional but recommended) Hide the hover tooltips Google adds over translated text */
-  .goog-text-highlight {
+/* 4. Hide the annoying hover tooltips over translated words */
+.goog-text-highlight {
     background-color: transparent !important;
     box-shadow: none !important;
-  }
+}
 
   /* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
