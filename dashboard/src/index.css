@@ -38,7 +38,21 @@
   }
 
 
+  /* 1. Hide the top translation banner iframe */
+  .goog-te-banner-frame.skiptranslate {
+    display: none !important;
+  }
 
+  /* 2. Reset the body's top positioning that the banner shifts down */
+  body {
+    top: 0px !important;
+  }
+
+  /* 3. (Optional but recommended) Hide the hover tooltips Google adds over translated text */
+  .goog-text-highlight {
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
 
   /* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
