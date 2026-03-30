@@ -37,28 +37,20 @@
     color: white;
   }
 
-/* 1. Hide ANY iframe that comes from Google Translate */
-iframe[src*="translate.googleapis.com"] {
-    display: none !important;
+/* Target the specific Google Translate iframe classes you found */
+iframe.VIpgJd-ZVi9od-ORHb-OEVmcd,
+iframe.skiptranslate {
+    visibility: hidden !important;
 }
 
-/* 2. Hide the banner frame using standard Google classes just in case */
-.goog-te-banner-frame,
-.goog-te-banner-frame.skiptranslate {
-    display: none !important;
+/* You can also target that specific dynamic ID pattern just to be safe */
+iframe[id^=":1.container"] {
+    visibility: hidden !important;
 }
 
-/* 3. Force the body and HTML back to the top */
-/* Google forcefully adds inline styles to push your site down, so we MUST override both */
-body, html {
+/* Ensure the body doesn't stay pushed down */
+body {
     top: 0px !important;
-    position: static !important;
-}
-
-/* 4. Hide the annoying hover tooltips over translated words */
-.goog-text-highlight {
-    background-color: transparent !important;
-    box-shadow: none !important;
 }
 
   /* :root {
