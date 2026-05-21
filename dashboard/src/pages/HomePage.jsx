@@ -31,7 +31,7 @@ function HomePage() {
       {/* Feature Cards Section */}
       <FeatureCards />
 
-      {/* 👇 2. Add the new Market Rates Chart section */}
+      {}
       <Box sx={{ padding: { xs: 2, sm: 4 } }}>
         <Paper
           sx={{
