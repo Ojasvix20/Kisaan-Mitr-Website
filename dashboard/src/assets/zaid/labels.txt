@@ -1,3 +1,0 @@
-0 Bacterial_Blight
-1 Healthy
-2 Red_Rot
