@@ -42,8 +42,9 @@ function ExpertChatPage() {
     const loadHistory = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/chat/${SESSION_ID}`,
+          `${import.meta.env.VITE_API_URL}/api/chat/${SESSION_ID}`,
         );
+
         const data = await response.json();
 
         // If there are previous messages in the database, format them for the UI
@@ -138,19 +139,22 @@ function ExpertChatPage() {
         parts: [{ text: msg.text }],
       }));
 
-      const response = await fetch("http://localhost:5000/api/chat", {
+
+
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: userText,
-          // Send a simple session ID for now. Later this will be the user's actual login ID.
-          sessionId: "farmer_test_session_1",
+          sessionId: SESSION_ID,
         }),
       });
-      const data = await response.json();
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(text);
+      }
 
-      if (!response.ok)
-        throw new Error(data.error || "Failed to fetch response");
+      const data = await response.json();
 
       const expertMessage = {
         id: Date.now() + 1,
