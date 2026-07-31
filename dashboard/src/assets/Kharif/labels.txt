@@ -1,0 +1,8 @@
+0 Rice_Brown_Spot
+1 Rice_Healthy
+2 Rice_Leaf_Blast
+3 Rice_Neck_Blast
+4 Corn_Common_Rust
+5 Corn_Gray_Leaf_Spot
+6 Corn_Healthy
+7 Corn_Northern_Leaf_Blight
