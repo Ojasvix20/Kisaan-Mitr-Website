@@ -162,7 +162,12 @@ app.post("/api/upload", upload.single("image"), async (req, res) => {
     res.status(500).json({ error: "Internal server error." });
   }
 });
-
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Kisaan Mitr Backend is running 🚀",
+  });
+});
 app.listen(PORT, () => {
   console.log(`Kisaan Mitr backend running on port ${PORT}`);
 });
