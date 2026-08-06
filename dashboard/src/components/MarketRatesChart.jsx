@@ -1,6 +1,4 @@
-// src/components/MarketRatesChart.jsx
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -12,7 +10,6 @@ import {
   Legend,
 } from "chart.js";
 
-// We need to register the components we're using with Chart.js
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -22,38 +19,9 @@ ChartJS.register(
   Legend
 );
 
-// This is our fake data for the chart
-const data = {
-  labels: ["Wheat", "Rice", "Mustard", "Cotton", "Sugarcane", "Maize"],
-  datasets: [
-    {
-      label: "Price per Quintal (₹)",
-      data: [2150, 2203, 5450, 6800, 315, 2090], // Fake data points
-      backgroundColor: [
-        "rgba(75, 192, 192, 0.9)",
-        "rgba(255, 206, 86, 0.9)",
-        "rgba(255, 99, 132, 0.9)",
-        "rgba(54, 162, 235, 0.9)",
-        "rgba(153, 102, 255, 0.9)",
-        "rgba(255, 159, 64, 0.9)",
-      ],
-      borderColor: [
-        "rgba(75, 192, 192, 1)",
-        "rgba(255, 206, 86, 1)",
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(153, 102, 255, 1)",
-        "rgba(255, 159, 64, 1)",
-      ],
-      borderWidth: 1,
-    },
-  ],
-};
-
-// These options control the chart's appearance (e.g., text color)
 const options = {
   responsive: true,
-  maintainAspectRatio: false, // 👈 This is a key change for responsiveness
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       position: "top",
@@ -75,20 +43,94 @@ const options = {
         color: "white",
         font: { size: 12 },
       },
-      grid: { color: "rgba(255, 255, 255, 0.2)" },
+      grid: {
+        color: "rgba(255,255,255,0.2)",
+      },
     },
     x: {
       ticks: {
         color: "white",
-        font: { size: 10 }, // 👈 Reduced font size for x-axis labels
+        font: { size: 10 },
       },
-      grid: { color: "rgba(255, 255, 255, 0.2)" },
+      grid: {
+        color: "rgba(255,255,255,0.2)",
+      },
     },
   },
 };
 
+const colors = [
+  "rgba(75, 192, 192, 0.9)",
+  "rgba(255, 206, 86, 0.9)",
+  "rgba(255, 99, 132, 0.9)",
+  "rgba(54, 162, 235, 0.9)",
+  "rgba(153, 102, 255, 0.9)",
+  "rgba(255, 159, 64, 0.9)",
+];
+
+const borders = [
+  "rgba(75, 192, 192, 1)",
+  "rgba(255, 206, 86, 1)",
+  "rgba(255, 99, 132, 1)",
+  "rgba(54, 162, 235, 1)",
+  "rgba(153, 102, 255, 1)",
+  "rgba(255, 159, 64, 1)",
+];
+
 function MarketRatesChart() {
-  return <Bar options={options} data={data} />;
+  const [chartData, setChartData] = useState({
+    labels: [],
+    datasets: [],
+  });
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchMarketRates();
+  }, []);
+
+  const fetchMarketRates = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/market");
+
+      const rates = await response.json();
+
+      setChartData({
+        labels: rates.map((item) => item.crop),
+
+        datasets: [
+          {
+            label: "Price per Quintal (₹)",
+            data: rates.map((item) => item.price),
+
+            backgroundColor: rates.map(
+              (_, index) => colors[index % colors.length]
+            ),
+
+            borderColor: rates.map(
+              (_, index) => borders[index % borders.length]
+            ),
+
+            borderWidth: 1,
+          },
+        ],
+      });
+    } catch (error) {
+      console.error("Failed to fetch market rates:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <h3 style={{ color: "white" }}>
+        Loading market rates...
+      </h3>
+    );
+  }
+
+  return <Bar options={options} data={chartData} />;
 }
 
 export default MarketRatesChart;
