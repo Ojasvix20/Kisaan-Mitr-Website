@@ -5,6 +5,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import EditCropDialog from "./EditCropDialog";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function MarketRatesTable() {
   const [rows, setRows] = useState([]);
@@ -27,7 +28,7 @@ function MarketRatesTable() {
     if (!confirmDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/market/${crop}`, {
+      const response = await fetch(`${API_URL}/api/market${crop}`, {
         method: "DELETE",
       });
 
@@ -44,7 +45,7 @@ function MarketRatesTable() {
 
   const fetchRates = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/market");
+      const response = await fetch(`${API_URL}/api/market`);
 
       const data = await response.json();
 

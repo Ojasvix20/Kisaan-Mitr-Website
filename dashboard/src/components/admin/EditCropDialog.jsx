@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 import {
   Dialog,
   DialogTitle,
@@ -30,7 +32,7 @@ function EditCropDialog({
   const handleSubmit = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/market/${crop}`,
+        `${API_URL}/api/market${crop}`,
         {
           method: "PUT",
           headers: {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,48 +11,64 @@ import {
   Legend,
 } from "chart.js";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 const options = {
   responsive: true,
   maintainAspectRatio: false,
+
   plugins: {
     legend: {
       position: "top",
       labels: {
         color: "white",
-        font: { size: 14 },
+        font: {
+          size: 14,
+        },
       },
     },
+
     title: {
       display: true,
       text: "Today's Market Rates",
       color: "white",
-      font: { size: 18 },
+      font: {
+        size: 18,
+      },
     },
   },
+
   scales: {
     y: {
       ticks: {
         color: "white",
-        font: { size: 12 },
+        font: {
+          size: 12,
+        },
       },
+
       grid: {
         color: "rgba(255,255,255,0.2)",
       },
     },
+
     x: {
       ticks: {
         color: "white",
-        font: { size: 10 },
+        font: {
+          size: 10,
+        },
       },
+
       grid: {
         color: "rgba(255,255,255,0.2)",
       },
@@ -91,7 +108,11 @@ function MarketRatesChart() {
 
   const fetchMarketRates = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/market");
+      const response = await fetch(`${API_URL}/api/market`);
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch market rates");
+      }
 
       const rates = await response.json();
 
@@ -101,14 +122,15 @@ function MarketRatesChart() {
         datasets: [
           {
             label: "Price per Quintal (₹)",
+
             data: rates.map((item) => item.price),
 
             backgroundColor: rates.map(
-              (_, index) => colors[index % colors.length]
+              (_, index) => colors[index % colors.length],
             ),
 
             borderColor: rates.map(
-              (_, index) => borders[index % borders.length]
+              (_, index) => borders[index % borders.length],
             ),
 
             borderWidth: 1,
@@ -123,11 +145,7 @@ function MarketRatesChart() {
   };
 
   if (loading) {
-    return (
-      <h3 style={{ color: "white" }}>
-        Loading market rates...
-      </h3>
-    );
+    return <h3 style={{ color: "white" }}>Loading market rates...</h3>;
   }
 
   return <Bar options={options} data={chartData} />;
