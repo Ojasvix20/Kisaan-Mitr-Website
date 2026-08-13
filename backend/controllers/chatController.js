@@ -48,18 +48,41 @@ export const sendMessage = async (req, res) => {
     }));
 
     // Step D: Talk to Gemini
-    const chatSession = ai.chats.create({
-      model: "gemini-2.5-flash",
-      config: {
-        systemInstruction:
-          "You are Dr. Agrim, an expert agronomist for the Kisaan Mitr platform. " +
-          "Provide practical, highly accurate farming advice for Indian farmers.",
-      },
-      // We pass the history we just pulled from MongoDB!
-      history: formattedHistory.slice(0, -1), // Everything except the very last message
-    });
+    // Step D: Talk to Gemini
+const chatSession = ai.chats.create({
+  model: "gemini-2.5-flash",
+  config: {
+    systemInstruction:
+      "You are Dr. Agrim, an expert agronomist for the Kisaan Mitr platform. " +
+      "Provide practical, highly accurate farming advice for Indian farmers.",
+  },
+  history: formattedHistory.slice(-10, -1),
+});
 
-    const response = await chatSession.sendMessage({ message: message });
+let response;
+
+for (let attempt = 1; attempt <= 3; attempt++) {
+  try {
+    response = await chatSession.sendMessage({ message: message });
+    break;
+  } catch (error) {
+    console.error(`Gemini attempt ${attempt} failed:`, error);
+
+    const isTimeout =
+      error?.status === 504 ||
+      error?.status === "DEADLINE_EXCEEDED" ||
+      error?.error?.code === 504 ||
+      error?.error?.status === "DEADLINE_EXCEEDED";
+
+    if (!isTimeout || attempt === 3) {
+      throw error;
+    }
+
+    await new Promise((resolve) =>
+      setTimeout(resolve, attempt * 2000)
+    );
+  }
+}
 
     // Step E: Save the AI's response to MongoDB
     chatDoc.messages.push({ role: "model", text: response.text });
