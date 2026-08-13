@@ -56,7 +56,7 @@ export const sendMessage = async (req, res) => {
           "Provide practical, highly accurate farming advice for Indian farmers.",
       },
       // We pass the history we just pulled from MongoDB!
-      history: formattedHistory.slice(0, -1), // Everything except the very last message
+      history: formattedHistory.slice(-10, -1), // last 9 mssg
     });
 
     const response = await chatSession.sendMessage({ message: message });
