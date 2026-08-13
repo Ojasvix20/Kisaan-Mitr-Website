@@ -48,8 +48,6 @@ export const sendMessage = async (req, res) => {
     }));
 
     // Step D: Talk to Gemini
-<<<<<<< HEAD
-    // Step D: Talk to Gemini
 const chatSession = ai.chats.create({
   model: "gemini-2.5-flash",
   config: {
