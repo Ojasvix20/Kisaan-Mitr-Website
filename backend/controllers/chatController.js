@@ -59,18 +59,6 @@ const chatSession = ai.chats.create({
   },
   history: formattedHistory.slice(-10, -1),
 });
-=======
-    const chatSession = ai.chats.create({
-      model: "gemini-2.5-flash",
-      config: {
-        systemInstruction:
-          "You are Dr. Agrim, an expert agronomist for the Kisaan Mitr platform. " +
-          "Provide practical, highly accurate farming advice for Indian farmers.",
-      },
-      // We pass the history we just pulled from MongoDB!
-      history: formattedHistory.slice(-10, -1), // last 9 mssg
-    });
->>>>>>> b3a5ed7e86013d889d4aa2ef1d444df57a01e105
 
 let response;
 
