@@ -47,8 +47,8 @@ function FeatureCards() {
                 boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.1)',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                 '&:hover': {
-                  transform: 'translateY(-10px)',
-                  boxShadow: '0 16px 40px 0 rgba(0, 0, 0, 0.15)',
+                  transform: 'translateY(-10px) scale(1.03)',
+                  boxShadow: '0 16px 40px 0 rgba(252, 252, 252, 0.15)',
                 },
               }}
             >

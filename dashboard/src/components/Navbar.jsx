@@ -66,14 +66,14 @@ function Navbar() {
       <AppBar
         position="fixed"
         sx={{
-          backgroundColor: "rgba(255, 255, 255, 0.25)",
+          backgroundColor: "rgba(131, 131, 131, 0)",
           backdropFilter: "blur(10px)",
           boxShadow: "none",
           borderBottom: "1px solid rgba(255, 255, 255, 0.18)",
         }}
       >
         <Toolbar>
-          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+          <Typography variant="h5" sx={{ fontWeight: "bold" }}>
             Kisaan Mitr 🌱
           </Typography>
           <Box sx={{ flexGrow: 1 }} />

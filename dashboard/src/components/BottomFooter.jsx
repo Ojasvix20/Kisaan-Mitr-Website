@@ -39,13 +39,11 @@ function BottomFooter() {
             Kisaan Mitr 🌱
           </Typography>
           <Typography variant="body2" sx={{ opacity: 0.8, maxWidth: "800px" }}>
-            Built for the modern farmer, Kisaan Mitr provides the essential
-            technological tools to thrive in today's agricultural landscape. Our
-            platform translates complex data into simple, actionable advice,
-            helping you increase your harvest, reduce waste, and adapt to
-            challenges. From AI-driven disease detection to live market rates,
-            we are committed to enhancing your profitability and empowering you
-            to cultivate a lasting legacy.
+            Kisaan Mitr empowers farmers with technology to make better farming
+            decisions.
+            <br />
+            It brings AI-based crop disease detection, real-time sensor data,
+            expert guidance, and market rates — all in one place.
           </Typography>
         </Grid>
 
