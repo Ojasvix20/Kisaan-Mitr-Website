@@ -16,8 +16,6 @@ import {
 import SendIcon from "@mui/icons-material/Send";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import PersonIcon from "@mui/icons-material/Person";
-import MicIcon from "@mui/icons-material/Mic";
-import MicOffIcon from "@mui/icons-material/MicOff";
 import ReactMarkdown from "react-markdown";
 
 const initialMessages = [
@@ -33,10 +31,8 @@ function ExpertChatPage() {
   const [messages, setMessages] = useState(initialMessages);
   const [newMessage, setNewMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isListening, setIsListening] = useState(false);
 
   const chatEndRef = useRef(null);
-  const recognitionRef = useRef(null);
   // Fetch previous chat history when the page loads
   useEffect(() => {
     const loadHistory = async () => {
@@ -69,62 +65,8 @@ function ExpertChatPage() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
 
-  // NEW ROBUST MICROPHONE LOGIC
-  const handleListen = () => {
-    if (isListening) {
-      recognitionRef.current?.stop();
-      return;
-    }
-
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      alert(
-        "Speech Recognition is not supported in this browser. Please use Chrome or Edge.",
-      );
-      return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.lang = "hi-IN";
-
-    recognition.onstart = () => {
-      setIsListening(true);
-      setNewMessage("");
-    };
-
-    recognition.onresult = (event) => {
-      let currentTranscript = "";
-      for (let i = 0; i < event.results.length; i++) {
-        currentTranscript += event.results[i][0].transcript;
-      }
-      setNewMessage(currentTranscript);
-    };
-
-    recognition.onerror = (event) => {
-      console.error("Speech recognition error:", event.error);
-
-      // THIS WILL PRINT THE EXACT ERROR IN YOUR TEXT BOX
-      setNewMessage(`[Mic Error: ${event.error}]`);
-
-      setIsListening(false);
-    };
-
-    recognition.onend = () => {
-      setIsListening(false);
-    };
-
-    recognitionRef.current = recognition;
-    recognition.start();
-  };
-
   const handleSend = async () => {
     if (newMessage.trim() === "") return;
-
-    if (isListening) recognitionRef.current?.stop();
 
     const userText = newMessage;
     const userMessage = { id: Date.now(), text: userText, sender: "user" };
@@ -138,8 +80,6 @@ function ExpertChatPage() {
         role: msg.sender === "user" ? "user" : "model",
         parts: [{ text: msg.text }],
       }));
-
-
 
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/chat`, {
         method: "POST",
@@ -180,15 +120,19 @@ function ExpertChatPage() {
   return (
     <Box
       sx={{
-        paddingTop: "8rem",
+        minHeight: "100vh",
+        paddingTop: "72px", // navbar space
         paddingX: "2rem",
+        boxSizing: "border-box",
+
         display: "flex",
         justifyContent: "center",
+        alignItems: "center",
       }}
     >
       <Paper
         sx={{
-          maxWidth: "800px",
+          maxWidth: "90%",
           width: "100%",
           height: "75vh",
           display: "flex",
@@ -334,29 +278,10 @@ function ExpertChatPage() {
             alignItems: "center",
           }}
         >
-          {/* THE MIC BUTTON */}
-          <IconButton
-            type="button"
-            onClick={handleListen}
-            color={isListening ? "error" : "primary"}
-            disabled={isLoading}
-            sx={{
-              mr: 1,
-              bgcolor: isListening ? "rgba(244, 67, 54, 0.2)" : "transparent",
-            }}
-          >
-            {/* THIS LINE ACTUALLY DRAWS THE ICON */}
-            {isListening ? <MicOffIcon /> : <MicIcon />}
-          </IconButton>
-
           <TextField
             fullWidth
             variant="outlined"
-            placeholder={
-              isListening
-                ? "Listening..."
-                : "Ask about crops, weather, or market rates..."
-            }
+            placeholder={"Ask about crops, weater or market rates..."}
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             disabled={isLoading}
@@ -376,7 +301,7 @@ function ExpertChatPage() {
             type="submit"
             variant="contained"
             color="success"
-            disabled={isLoading || (!newMessage.trim() && !isListening)}
+            disabled={isLoading || !newMessage.trim()}
             sx={{
               ml: 1,
               borderRadius: "8px",
