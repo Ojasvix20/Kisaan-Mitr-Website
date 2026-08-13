@@ -36,3 +36,4 @@ body {
 }
 
 
+/* Target the specific Google Translate iframe classes you found */ iframe.VIpgJd-ZVi9od-ORHb-OEVmcd, iframe.skiptranslate { visibility: hidden !important; } /* You can also target that specific dynamic ID pattern just to be safe */ iframe[id^=":1.container"] { visibility: hidden !important; } /* Ensure the body doesn't stay pushed down */ body { top: 0px !important; }
