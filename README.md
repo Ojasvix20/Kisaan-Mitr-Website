@@ -1,4 +1,4 @@
- #🌾 Kisaan Mitr
+ # 🌾 Kisaan Mitr
 ﻿
 ## An AI-powered smart farming platform that helps farmers detect crop diseases, monitor field conditions, access market prices, and communicate with agricultural experts — all through a multilingual interface.
 
